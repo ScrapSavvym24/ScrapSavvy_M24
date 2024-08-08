@@ -1,27 +1,28 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Toolbar, Typography, Container } from "@mui/material";
-import { BRANDNAME } from "../../Services/Utils";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Toolbar, Typography, Container, Box, Button, Menu, MenuItem } from '@mui/material';
+import { BRANDNAME } from '../../Services/Utils';
 
 const Navbar = () => {
+
   return (
-    <div position="static" className="navbar">
+    <Box component="nav" sx={{ position: 'static', backgroundColor: 'white' }}>
       <Container>
         <Toolbar>
           <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
             {BRANDNAME}
           </Typography>
-          <div>
-            <Link color="inherit" component={Link} to="/pricing">
-              Pricing
-            </Link>
-            <Link color="inherit" component={Link} to="/about">
-              About
-            </Link>
-          </div>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Button component={Link} to="/signin" sx={{ textTransform: 'none', marginRight: 2 }}>
+              Signin
+            </Button>
+            <Button component={Link} to="/signup" sx={{ textTransform: 'none', marginRight: 2 }}>
+              Signup
+            </Button>
+          </Box>
         </Toolbar>
       </Container>
-    </div>
+    </Box>
   );
 };
 

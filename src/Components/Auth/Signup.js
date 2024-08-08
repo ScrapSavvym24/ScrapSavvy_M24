@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Toast from "../Common/Snackbar";
+import { Box, Button, Container, TextField, Typography, Grid, Snackbar, Alert } from "@mui/material";
 import { BRANDNAME } from "../../Services/Utils";
+import Navbar from "../Common/Navbar";
+import Toast from "../Common/Snackbar";
+import { useDispatch } from "react-redux";
+import { ActionCreator } from "../../State/Actions/ActionCreator";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -9,149 +13,158 @@ const Signup = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [address, setAddress] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const dispatch = useDispatch();
+    
+
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
   const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      setSnackbarMessage('Passwords do not match!');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      return;
+    }
     
-    setSnackbarMessage('Sign-in successful!');
+    dispatch(ActionCreator.SetUserProfile({"email": email, "password": password}));
+    // Simulate a successful sign-up
+    setSnackbarMessage('Sign-up successful!');
     setSnackbarSeverity('success');
     setSnackbarOpen(true);
-    setTimeout(()=>{
+    setTimeout(() => {
       navigate("/dashboard");
-    }, 2000)
-    
+    }, 2000);
 
+    // Uncomment below for real API call
     // try {
-    //   const response = await mockSignIn();
-
-    
+    //   const response = await yourSignUpAPI({ name, email, mobile, companyName, address, password });
     //   if (response.success) {
-    //     // Set success message and open Snackbar
-    //     setSnackbarMessage('Sign-in successful!');
+    //     setSnackbarMessage('Sign-up successful!');
     //     setSnackbarSeverity('success');
     //     setSnackbarOpen(true);
+    //     setTimeout(() => {
+    //       navigate("/dashboard");
+    //     }, 2000);
     //   } else {
-    //     setSnackbarMessage('Sign-in failed!');
+    //     setSnackbarMessage('Sign-up failed!');
     //     setSnackbarSeverity('error');
     //     setSnackbarOpen(true);
     //   }
     // } catch (error) {
-    //   setSnackbarMessage('An error occurred during sign-in!');
+    //   setSnackbarMessage('An error occurred during sign-up!');
     //   setSnackbarSeverity('error');
     //   setSnackbarOpen(true);
     // }
   };
 
   return (
-    <div className="centered">
-        <Toast
+    <>
+      <Navbar />
+      <div className="md-container">
+      <Toast
         open={snackbarOpen}
         close={handleSnackbarClose}
         message={snackbarMessage}
         severity={snackbarSeverity}
       />
-      <div className="md-container mb-3">
         <div className="header-div">
-          <h1>{BRANDNAME}</h1>
-        </div>
-        <h3>Sign up</h3>
-        <form>
-          <div className="row">
-            {/* <label for="txtName" className="form-label mt-2">Name</label> */}
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control"
-                id="txtName"
-                value=""
-                placeholder="Name"
-              />
-            </div>
-            {/* <label for="txtEmail" className="form-label mt-4">Email</label> */}
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control"
-                id="txtEmail"
-                value=""
-                placeholder="Email"
-              />
-            </div>
+            <h1>Sign up</h1>
           </div>
-          <div className="row">
-            {/* <label for="txtMobile" className="form-label mt-4">Mobile</label> */}
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control"
-                id="txtMobile"
-                value=""
-                placeholder="Mobile"
+        <Box component="form" noValidate autoComplete="off">
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Name"
+                variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
-            </div>
-            {/* <label for="txtCompName" className="form-label mt-4">Company name</label> */}
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control"
-                id="txtCompName"
-                value=""
-                placeholder="Company name"
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Email"
+                variant="outlined"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-            </div>
-          </div>
-
-          <div className="row">
-            {/* <label for="txtAddress" className="form-label mt-4">Company address</label> */}
-            <div className="col-md-12 mb-3">
-              <textarea
-                type="text"
-                className="form-control"
-                id="txtAddress"
-                value=""
-                placeholder="Company address"
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Mobile"
+                variant="outlined"
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
               />
-            </div>
-          </div>
-          <div className="row">
-            {/* <label for="txtPassword" className="form-label mt-4">Confirm password</label> */}
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control"
-                id="txtPassword"
-                value=""
-                placeholder="Password"
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Company Name"
+                variant="outlined"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
               />
-            </div>
-            {/* <label for="txtConfirmPass" className="form-label mt-4">Confirm password</label> */}
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control"
-                id="txtConfirmPass"
-                value=""
-                placeholder="Confirm password"
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Company Address"
+                variant="outlined"
+                multiline
+                rows={3}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
               />
-            </div>
-          </div>
-          <div className="row mt-5">
-            <div className="col-md-6">
-              <button type="button" className="btn btn-primary w-100" onClick={handleSignUp}>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                type="password"
+                label="Password"
+                variant="outlined"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                type="password"
+                label="Confirm Password"
+                variant="outlined"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} sx={{ mt: 4 }}>
+            <Grid item xs={12} sm={6}>
+            <button type="button" className="btn btn-primary w-100" onClick={handleSignUp}>
                 Sign up
               </button>
-            </div>
-            <div className="col-md-6">
-              <Link type="button" className="btn btn-light w-100" to="/signin">
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            <Link type="button" className="btn btn-light w-100" to="/signin">
                 Have an account?
               </Link>
-            </div>
-          </div>
-        </form>
+            </Grid>
+          </Grid>
+        </Box>
       </div>
-    </div>
+    </>
   );
 };
 

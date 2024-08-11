@@ -1,0 +1,103 @@
+
+:root {
+    --background-color: #f0f0f0;
+    --container-background-color: #ffffff;
+    --primary-color: #f05454;
+    --secondary-color: #ccc;
+    --bs-dark: #222;
+    --text-color: #333;
+    --secondary-text-color: #666;
+    --input-border-color: #ccc;
+    --text-white-color: #ffffff;
+    --border-radius: 10px;
+    --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    --font-size-extra-large: 32px;
+    --font-size-large: 24px;
+    --font-size-medium: 18px;
+    --font-size-small: 14px;
+    --padding: 20px;
+  }
+
+#sidebar-wrapper {
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+  }
+  
+  /* #page-content-wrapper {
+    flex: 1;
+    padding: 20px;
+    transition: all 0.3s ease;
+  } */
+  
+  @media (min-width: 992px) {
+    #page-content-wrapper {
+      /* Adjust based on sidebar width */
+      margin-left: 250px; 
+    }
+  }
+  
+  .sidebar-heading {
+    padding: 15px 20px;
+    font-size: 1.5rem;
+    background: var(--primary-color);
+    color: var(--text-white-color);
+    text-align: center;
+  }
+  
+  .offcanvas-body{
+    width: 100%;
+    text-align: left;
+  }
+  .list-group-item {
+    margin-top: 8px;
+    border: none;
+    background: var(--bs-dark);
+    transition: background-color 0.3s ease;
+  }
+  
+  .list-group-item:hover {
+    background: var(--primary-color);
+    color: white;
+  }
+  
+  .list-group-item .icon {
+    width: 50px;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  .list-group-item span {
+    flex: 1;
+  }
+  
+  // For smaller screens
+  .offcanvas {
+    margin-top: 8px;
+    border: none;
+    background: var(--bs-dark);
+    width: 250px;
+    color: white;
+  }
+  
+  .offcanvas .offcanvas-header {
+    border-bottom: 1px solid #495057;
+  }
+  
+  .offcanvas .offcanvas-body {
+    flex: 1;
+  }
+  
+  .offcanvas .list-group-item {
+    color: white;
+  }
+  
+  .offcanvas .list-group-item:hover {
+    background: var(--primary-color);
+    color: white;
+  }
+  

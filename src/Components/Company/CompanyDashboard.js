@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../.././Static/Dashboard.css';
 import CompanySidebar from '../Common/CompanySidebar';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import LogoutMenu from '../Common/LogoutMenu';
 
 const CompanyDashboard = () => {
-  
+  const token = useSelector(state => state)
+
+  useEffect(()=>{
+    console.log(token);
+  })
   return (
     <div className='d-flex'>
     <CompanySidebar/>
     <div className='container'>
     <div className="dashboard-content">
-        
-        <h1 className="dashboard-title">Dashboard</h1>
+    <div className='float-end'>
+        <LogoutMenu />
+      </div>
+        <h1 className="dashboard-title">Dashboard - Company</h1>
       <div className="row">
         <div className="col-lg-3 col-md-6 mb-4">
           <div className="card bg-light text-dark">

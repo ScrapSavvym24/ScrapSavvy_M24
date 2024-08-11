@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Box, Button, Container, TextField, Typography, Grid, Snackbar, Alert } from "@mui/material";
+import { Box, Button, Container, TextField, Typography, Grid, Snackbar, Alert, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { BRANDNAME } from "../../Services/Utils";
 import Navbar from "../Common/Navbar";
 import Toast from "../Common/Snackbar";
 import { useDispatch } from "react-redux";
 import { ActionCreator } from "../../State/Actions/ActionCreator";
+import AuthService from "../../Services/AuthService";
+import { ValidateEmail, ValidatePassword } from "./Validation";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -17,9 +19,11 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
   const [companyName, setCompanyName] = useState('');
-  const [address, setAddress] = useState('');
+  const [companyAddress, setCompanyAddress] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [userRole, setUserRole] = useState();
+  const [errors, setErrors] = useState({});
 
   const dispatch = useDispatch();
     
@@ -27,7 +31,17 @@ const Signup = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
+  const validate = () => {
+    const tempErrors = {};
+    let isValid = true;
+    console.log(email + "----" + password);
+    isValid = ValidateEmail(email, tempErrors) && isValid;
+    isValid = ValidatePassword(password, tempErrors, "password") && isValid;
 
+    console.log(tempErrors);
+    setErrors(tempErrors);
+    return isValid;
+  };
   const handleSignUp = async () => {
     if (password !== confirmPassword) {
       setSnackbarMessage('Passwords do not match!');
@@ -35,38 +49,48 @@ const Signup = () => {
       setSnackbarOpen(true);
       return;
     }
+    //dispatch(ActionCreator.SetUserProfile({"email": email, "password": password}));
+    if (validate()) {
+      let formData = {
+      "email": email,
+      "name": name,
+      "mobile": mobile,
+      "companyName": companyName,
+      "companyAddress": companyAddress,
+      "password": password,
+      "confirmPassword": confirmPassword,
+      "userRole": userRole
+      }
+      await AuthService.SignUp(formData)
+        .then((response) => {
+          console.log(response)
+            if (response.status === 201) {
+              handleSnackbar("Sign-up successful!", "success", true);
+              setTimeout(()=>{
+                navigate("/signin");
+              }, 2000)
+              
+            }
+            else{
+                handleSnackbar("Server error!", "error", true);
+            }
+        })
+        .catch(error => {
+            handleSnackbar(error.response.data, "error", true);
+        })
+  } 
     
-    dispatch(ActionCreator.SetUserProfile({"email": email, "password": password}));
-    // Simulate a successful sign-up
-    setSnackbarMessage('Sign-up successful!');
-    setSnackbarSeverity('success');
-    setSnackbarOpen(true);
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 2000);
+}
 
-    // Uncomment below for real API call
-    // try {
-    //   const response = await yourSignUpAPI({ name, email, mobile, companyName, address, password });
-    //   if (response.success) {
-    //     setSnackbarMessage('Sign-up successful!');
-    //     setSnackbarSeverity('success');
-    //     setSnackbarOpen(true);
-    //     setTimeout(() => {
-    //       navigate("/dashboard");
-    //     }, 2000);
-    //   } else {
-    //     setSnackbarMessage('Sign-up failed!');
-    //     setSnackbarSeverity('error');
-    //     setSnackbarOpen(true);
-    //   }
-    // } catch (error) {
-    //   setSnackbarMessage('An error occurred during sign-up!');
-    //   setSnackbarSeverity('error');
-    //   setSnackbarOpen(true);
-    // }
+  const handleSnackbar = (message, severity, show) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(show);
   };
 
+  const handleRoleChange = (event) =>{
+    setUserRole(event.target.value);
+  }
   return (
     <>
       <Navbar />
@@ -118,16 +142,26 @@ const Signup = () => {
                 onChange={(e) => setCompanyName(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
-                fullWidth
+              fullWidth
                 label="Company Address"
                 variant="outlined"
                 multiline
                 rows={3}
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                value={companyAddress}
+                onChange={(e) => setCompanyAddress(e.target.value)}
               />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel id="category-select-label">Sign up as </InputLabel>
+              <Select labelId="category-select-label" value={userRole} onChange={handleRoleChange} label="Product category">
+                <MenuItem value="customer">Customer</MenuItem>
+                <MenuItem value="company">Company</MenuItem>
+                <MenuItem value="scrapyard">Scrapyard</MenuItem>
+              </Select>
+            </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField

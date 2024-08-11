@@ -4,11 +4,22 @@
   }
   
   .dashboard-title {
-    font-size: 2rem;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-top: 30px;
+    margin-bottom: 30px;
   }
   
+  .dashboard-title h1{
+    margin-left: 10px;
+    font-size: 4rem;
+  }
+  .dashboard-title h2{
+    margin-left: 10px;
+    font-size: 2rem;
+  }
+  .dashboard-title h3{
+    margin-left: 10px;
+    font-size: 2rem;
+  }
   .card {
     height: 10rem;
     weight: 10rem;

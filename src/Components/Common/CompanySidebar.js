@@ -30,28 +30,28 @@ const CompanySidebar = () => {
         <div className="sidebar-heading">{BRANDNAME}</div>
         <div className="list-group list-group-flush" >
           <Link
-            to="/dashboard"
+            to="/company-dashboard"
             className="list-group-item list-group-item-action text-light"
           >
             <FontAwesomeIcon icon={faTachometerAlt} className="icon" />
             Dashboard
           </Link>
           <Link
-            to="/list-of-scraps"
+            to="/com-list-of-scraps"
             className="list-group-item list-group-item-action text-light"
           >
             <FontAwesomeIcon icon={faBoxOpen} className="icon" />
-            Scrap listing
+            View products
           </Link>
           <Link
-            to="/payments"
+            to="/company-payments"
             className="list-group-item list-group-item-action text-light"
           >
             <FontAwesomeIcon icon={faCreditCard} className="icon" />
             Payments
           </Link>
           <Link
-            to="/user-profile"
+            to="/company-profile"
             className="list-group-item list-group-item-action text-light"
           >
             <FontAwesomeIcon icon={faUser} className="icon" />

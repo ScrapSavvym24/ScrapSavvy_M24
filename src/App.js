@@ -21,12 +21,18 @@ import CustomerTransactions from './Components/Customer/CustomerTransactions';
 import CScrapsTable from './Components/Customer/CScrapsTable';
 import CompPaymentsReceivedTable from './Components/Company/CompPaymentsReceivedTable';
 import CompScrapsTable from './Components/Company/CompScrapsTable';
+import Frontpage from './frontpage';
+import Footer from './Components/Common/footer';
+
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter >
         <Routes>
+          
+        <Route path="/" exact element={<Frontpage />} />
+
           <Route path="/" exact element={<Signin />} />
           <Route path="/signup" exact element={<Signup />} />
           <Route path="/signin" exact element={<Signin />} />
@@ -54,6 +60,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
+      <Footer />
     </div>
   );
 }

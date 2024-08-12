@@ -42,7 +42,7 @@
 .sm-container{
     width: 100%;
     max-width: 400px;
-    margin: 3rem auto;
+    margin: 5rem auto;
     padding: var(--padding);
     background-color: var(--container-background-color);
     border-radius: var(--border-radius);
@@ -54,7 +54,7 @@
 .md-container {
     width: 100%;
     max-width: 600px;
-    margin: 3rem auto;
+    margin: 5rem auto;
     padding: var(--padding);
     background-color: var(--container-background-color);
     border-radius: var(--border-radius);

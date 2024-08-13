@@ -1,0 +1,420 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background-color: rgb(0, 0, 0);
+  padding: 1rem 0;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0; /* Ensure it spans the entire width */
+  z-index: 1000;
+  transition: all 0.3s ease;
+  border-radius: 0 0 35px 35px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Optional shadow for better visibility */
+}
+
+header.scrolled {
+  background-color: rgba(68, 74, 68, 0.786);
+}
+
+.header-content {
+  text-decoration-color: #0e0d0a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  font-family: cursive;
+  text-shadow: #0e0d0a;
+  .p{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+}
+
+.logo {
+  position:relative;
+  overflow:hidden;
+
+}
+
+.logo-image {
+  height: 48px;
+  transition: transform 0.s ease;
+}
+
+.logo-image:hover {
+  transform: scale(0.8);
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+.logo::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 20%;
+  height: 200%;
+  opacity: 0;
+  transform: rotate(30deg);
+  background: rgb(245, 3, 3);
+  background: linear-gradient(
+    to right, 
+    rgba(255, 255, 255, 0.13) 0%,
+    rgba(9, 244, 48, 0.845) 77%,
+    rgb(255, 255, 0) 92%,
+    rgba(255, 255, 255, 0.0) 100%
+  );
+  animation: shine 4s infinite;
+}
+
+.header-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-item {
+  position: relative;
+  margin-right: 1rem;
+}
+
+.nav-item a {
+  color: #f1f1ec;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-item a:hover {
+  color: #f1c40f;
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #f1c40f;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.nav-item:hover::after {
+  transform: scaleX(1);
+}
+
+.book-collection {
+  background-color: #e74c3c;
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 25px;
+  font-weight: bold;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.book-collection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: all 0.5s;
+}
+
+.book-collection:hover::before {
+  left: 100%;
+}
+
+.book-collection:hover {
+  background-color: #d52d1a;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(232, 48, 27, 0.5);
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #0e0d0a;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown-content a {
+  color: rgb(255, 255, 255);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.nav-item:hover .dropdown-content {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero {
+  background-image: url('https://img.freepik.com/free-vector/scrapyard-junkyard-outdoor-scene-abandoned-objects_1308-159608.jpg?w=1480&t=st=1723423049~exp=1723423649~hmac=54ea7aab8a432fb6232ff706e1eca95d8fbcff1eb9093e4897b29a49f2b338a7');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  text-align: center;
+  padding: 0; /* Remove padding */
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  width: 100%; /* Ensure full width */
+  margin: 0; /* Remove any default margins */
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  padding: 14rem 1rem; /* Move padding here */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: fadeInUp 1s ease-out;
+  font-family: cursive;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  animation: fadeInUp 1s ease-out 0.5s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.hero .scrap-free {
+  text-shadow: 0 -6px rgb(0, 0, 0);
+}
+
+/* Ensure the section takes full width */
+section.hero {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+}
+
+/* Reset any default body margins */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.door-step {
+  color: #f1c40f;
+  position: relative;
+  display: inline-block;
+}
+
+.door-step::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background-color: #f1c40f;
+  animation: underline 3s ease-in-out infinite;
+}
+
+@keyframes underline {
+  0% { width: 0; }
+  50% { width: 100%; }
+  100% { width: 0; }
+}
+
+.rate-list, .hero .book-collection {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  animation: fadeInUp 1s ease-out 1s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+  border-radius: 25px;
+}
+
+.rate-list {
+  background-color: #3498db;
+  color: white;
+}
+
+.rate-list:hover, .hero .book-collection:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.about, .services {
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.service-cards {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.service-card {
+  background-color: #f4f4f4;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+}
+
+.service-card i {
+  font-size: 3rem;
+  color: #3498db;
+  margin-bottom: 1rem;
+}
+
+footer {
+  background-color: #2c3e50;
+  color: white;
+  padding: 2rem 0;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.footer-links a, .social-links a {
+  color: white;
+  text-decoration: none;
+  margin-right: 1rem;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover, .social-links a:hover {
+  color: #3498db;
+}
+
+.copyright {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+  }
+  
+  .header-links {
+    margin-top: 1rem;
+  }
+  
+  .service-cards {
+    flex-direction: column;
+  }
+}
+
+.scrap-free {
+  color: #f1c40f;
+  position: relative;
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

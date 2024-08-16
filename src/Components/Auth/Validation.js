@@ -1,17 +1,17 @@
 // Email validation
 export const ValidateEmail = (email, tempErrors) => {
     let isValid = true;
-
+  
     if (!email) {
-        tempErrors["email"] = "Email is required";
-        isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-        tempErrors["email"] = "Email is not valid";
-        isValid = false;
+      tempErrors["email"] = "Email is required";
+      isValid = false;
+    } else if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+      tempErrors["email"] = "Only username@gmail.com format is allowed";
+      isValid = false;
     }
-
+  
     return isValid;
-}
+  }
 
 const passwordRequirements = [
     { regex: /.{6,}/, message: "Password must be at least 6 characters long" },

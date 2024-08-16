@@ -52,59 +52,91 @@ const Signup = () => {
   const validate = () => {
     const tempErrors = {};
     let isValid = true;
-    console.log(email + "----" + password);
-    isValid = ValidateEmail(email, tempErrors) && isValid;
-    isValid = ValidatePassword(password, tempErrors, "password") && isValid;
 
-    console.log(tempErrors);
+    if (!name) {
+      tempErrors.name = "Name is required";
+      isValid = false;
+    }
+
+    if (!email) {
+      tempErrors.email = "Email is required";
+      isValid = false;
+    } else if (!ValidateEmail(email)) {
+      tempErrors.email = "Invalid email";
+      isValid = false;
+    }
+
+    if (!mobile) {
+      tempErrors.mobile = "Mobile is required";
+      isValid = false;
+    }
+
+    if (!companyName) {
+      tempErrors.companyName = "Company name is required";
+      isValid = false;
+    }
+
+    if (!companyAddress) {
+      tempErrors.companyAddress = "Company address is required";
+      isValid = false;
+    }
+
+    if (!password) {
+      tempErrors.password = "Password is required";
+      isValid = false;
+    } else if (!ValidatePassword(password)) {
+      tempErrors.password = "Invalid password";
+      isValid = false;
+    }
+
+    if (!confirmPassword) {
+      tempErrors.confirmPassword = "Confirm password is required";
+      isValid = false;
+    } else if (password !== confirmPassword) {
+      tempErrors.confirmPassword = "Passwords do not match";
+      isValid = false;
+    }
+
+    if (!userRole) {
+      tempErrors.userRole = "User role is required";
+      isValid = false;
+    }
+
     setErrors(tempErrors);
     return isValid;
   };
 
   const handleSignUp = async () => {
-    if (password !== confirmPassword) {
-      setSnackbarMessage('Passwords do not match!');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
+    if (!validate()) {
       return;
     }
 
-    if (!name || !email || !mobile || !companyName || !companyAddress || !password || !confirmPassword || !userRole) {
-      setSnackbarMessage('Please fill in all fields!');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
-      return;
+    let formData = {
+      "email": email,
+      "name": name,
+      "mobile": mobile,
+      "companyName": companyName,
+      "companyAddress": companyAddress,
+      "password": password,
+      "confirmPassword": confirmPassword,
+      "userRole": userRole
     }
+    await AuthService.SignUp(formData)
+      .then((response) => {
+        console.log(response)
+        if (response.status === 201) {
+          handleSnackbar("Sign-up successful!", "success", true);
+          setTimeout(() => {
+            navigate("/signin");
+          }, 2000)
 
-    if (validate()) {
-      let formData = {
-        "email": email,
-        "name": name,
-        "mobile": mobile,
-        "companyName": companyName,
-        "companyAddress": companyAddress,
-        "password": password,
-        "confirmPassword": confirmPassword,
-        "userRole": userRole
-      }
-      await AuthService.SignUp(formData)
-        .then((response) => {
-          console.log(response)
-          if (response.status === 201) {
-            handleSnackbar("Sign-up successful!", "success", true);
-            setTimeout(() => {
-              navigate("/signin");
-            }, 2000)
-
-          } else {
-            handleSnackbar("Server error!", "error", true);
-          }
-        })
-        .catch(error => {
-          handleSnackbar(error.response.data, "error", true);
-        })
-    }
-
+        } else {
+          handleSnackbar("Server error!", "error", true);
+        }
+      })
+      .catch(error => {
+        handleSnackbar(error.response.data, "error", true);
+      })
   }
 
   const handleSnackbar = (message, severity, show) => {
@@ -129,7 +161,7 @@ const Signup = () => {
     <>
       <Navbar />
       <div className="md-container">
-        <Toast
+      <Toast
           open={snackbarOpen}
           close={handleSnackbarClose}
           message={snackbarMessage}
@@ -148,6 +180,8 @@ const Signup = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                error={errors.name ? true : false}
+                helperText={errors.name}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -158,6 +192,8 @@ const Signup = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                error={errors.email ? true : false}
+                helperText={errors.email}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -175,6 +211,8 @@ const Signup = () => {
                 type="tel"
                 inputMode="tel"
                 required
+                error={errors.mobile ? true : false}
+                helperText={errors.mobile}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -185,6 +223,8 @@ const Signup = () => {
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 required
+                error={errors.companyName ? true : false}
+                helperText={errors.companyName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -197,6 +237,8 @@ const Signup = () => {
                 value={companyAddress}
                 onChange={(e) => setCompanyAddress(e.target.value)}
                 required
+                error={errors.companyAddress ? true : false}
+                helperText={errors.companyAddress}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -207,6 +249,7 @@ const Signup = () => {
                   <MenuItem value="company">Company</MenuItem>
                   <MenuItem value="scrapyard">Scrapyard</MenuItem>
                 </Select>
+                {errors.userRole && <div style={{ color: 'red' }}>{errors.userRole}</div>}
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -218,6 +261,8 @@ const Signup = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                error={errors.password ? true : false}
+                helperText={errors.password}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -242,6 +287,8 @@ const Signup = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
+                error={errors.confirmPassword ? true : false}
+                helperText={errors.confirmPassword}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -260,7 +307,7 @@ const Signup = () => {
           </Grid>
           <Grid container spacing={2} sx={{ mt: 4 }}>
             <Grid item xs={12} sm={6}>
-              <button type="button" className="btn btn-primary w-100" onClick={handleSignUp}>
+            <button type="button" className="btn btn-primary w-100" onClick={handleSignUp}>
                 Sign up
               </button>
             </Grid>

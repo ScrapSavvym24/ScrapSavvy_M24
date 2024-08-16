@@ -1,47 +1,28 @@
-package com.scrap.entities;
+package com.scrap.dto;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
-@Table(name = "payments")
-public class Payment {
+public class PaymentDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
-
-    @Column(nullable = false, unique = true)
     private String transactionId;
-
-    @Column(nullable = false)
     private boolean transactionStatus;
-
-    @Column(nullable = false)
     private String modeOfPayment;
-
-    @Column(nullable = false)
     private LocalDateTime createdOn;
-
-    @Column(nullable = false)
     private LocalDateTime updatedOn;
+    private Long orderId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id", referencedColumnName = "orderId")
-    private Order order;
+    // Constructors
+    public PaymentDTO() {}
 
-    // Default constructor
-    public Payment() {
-    }
-
-    // Parameterized constructor
-    public Payment(String transactionId, boolean transactionStatus, String modeOfPayment, LocalDateTime createdOn, LocalDateTime updatedOn) {
+    public PaymentDTO(Long paymentId, String transactionId, boolean transactionStatus, String modeOfPayment, LocalDateTime createdOn, LocalDateTime updatedOn, Long orderId) {
+        this.paymentId = paymentId;
         this.transactionId = transactionId;
         this.transactionStatus = transactionStatus;
         this.modeOfPayment = modeOfPayment;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
+        this.orderId = orderId;
     }
 
     // Getters and Setters
@@ -93,24 +74,11 @@ public class Payment {
         this.updatedOn = updatedOn;
     }
 
-    // toString method
-    @Override
-    public String toString() {
-        return "Payments{" +
-                "paymentId=" + paymentId +
-                ", transactionId='" + transactionId + '\'' +
-                ", transactionStatus='" + transactionStatus + '\'' +
-                ", modeOfPayment='" + modeOfPayment + '\'' +
-                ", createdOn=" + createdOn +
-                ", updatedOn=" + updatedOn +
-                '}';
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 }

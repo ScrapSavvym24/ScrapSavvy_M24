@@ -5,9 +5,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.scrap.dto.OrderDTO;
+import com.scrap.dto.PaymentDTO;
 import com.scrap.entities.Order;
+import com.scrap.entities.Product;
+import com.scrap.entities.UserProfile;
+import com.scrap.repositories.ProductRepository;
 import com.scrap.services.OrderService;
+import com.scrap.services.PaymentService;
+import com.scrap.services.ProductService;
+import com.scrap.services.UserProfileService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -16,10 +25,38 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
+    private UserProfileService userProfileService;
+
+     @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private ProductRepository productRepository;
+
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        Order createdOrder = orderService.saveOrder(order);
-        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
+    public ResponseEntity<Order> createOrder(@RequestBody OrderDTO orderDto) {
+
+        UserProfile userProfile = userProfileService.getUserProfile(orderDto.getUserProfileId());
+        Product product = productService.getAllproduct(orderDto.getProductId());
+        if (userProfile != null && product != null){
+            Order order = new Order();
+            order.setUserProfile(userProfile);
+            order.setProduct(product);
+            Order createdOrder = orderService.saveOrder(order);
+            if (createdOrder != null){
+                PaymentDTO paymentDTO = new PaymentDTO();
+                paymentDTO.setTransactionId(orderDto.getTransactionId());
+                paymentService.savePayment(paymentDTO);
+                product.setProductStatus(false);
+                productRepository.save(product);
+            }
+            return new ResponseEntity<>(order, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping

@@ -31,8 +31,9 @@ public class UserBankDetail {
     @Column(nullable = false)
     private LocalDateTime updatedOn;
 
-    @OneToOne(mappedBy = "bankDetails")
-    private User user;
+    // @OneToOne(mappedBy = "bankDetails")
+    // @JoinColumn(name = "user_id", referencedColumnName = "userId")
+    // private User user;
 
     // Default constructor
     public UserBankDetail() {
@@ -114,13 +115,13 @@ public class UserBankDetail {
         this.updatedOn = updatedOn;
     }
 
-    public User getUser() {
-        return user;
-    }
+    // public User getUser() {
+    //     return user;
+    // }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    // public void setUser(User user) {
+    //     this.user = user;
+    // }
 
     // toString method
     @Override

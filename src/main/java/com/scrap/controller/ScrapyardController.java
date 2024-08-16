@@ -5,9 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.scrap.dto.PurchaseRequest;
-import com.scrap.entities.Scrap;
-import com.scrap.services.ScrapService;
+import com.scrap.dto.ProductDTO;
+import com.scrap.entities.Category;
+import com.scrap.entities.Product;
+import com.scrap.entities.UserProfile;
+import com.scrap.repositories.CategoryRepository;
+import com.scrap.services.ProductService;
+import com.scrap.services.UserProfileService;
 
 import java.util.List;
 
@@ -15,31 +19,75 @@ import java.util.List;
 @RequestMapping("/api/scrapyard")
 public class ScrapyardController {
     @Autowired
-    private ScrapService scrapService;
+    private ProductService productService;
 
-    @GetMapping("/scrap")
-    public ResponseEntity<List<Scrap>> viewAvailableScrap() {
-        List<Scrap> scrapList = scrapService.getAllScrap();
-        return new ResponseEntity<>(scrapList, HttpStatus.OK);
+    @Autowired
+    private UserProfileService userProfileService;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @PostMapping("/add_product")
+    public ResponseEntity<?> addProduct(@RequestBody ProductDTO productDTO) {
+        UserProfile userProfile = userProfileService.getUserProfile(productDTO.getUserProfileId());
+        if (userProfile != null){
+            Product product = new Product();
+            product.setUserProfile(userProfile);
+            Category category = categoryRepository.getOne(productDTO.getCategoryId());
+            product.setCategory(category);
+            product.setProductName(productDTO.getProductName());
+            product.setProductQuantity(productDTO.getProductQuantity());
+            product.setAvailQuantity(productDTO.getAvailQuantity());
+            product.setPricePerQuantity(productDTO.getPricePerQuantity());
+            product.setProductStatus(productDTO.isProductStatus());
+            product.setProductDescription(productDTO.getProductDescription());
+            product.setCreatedOn(productDTO.getCreatedOn());
+            product.setUpdatedOn(productDTO.getUpdatedOn());
+            productService.saveProduct(product);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Product added successfully!");
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/purchase")
-    public ResponseEntity<Scrap> purchaseScrap(@RequestBody PurchaseRequest purchaseRequest) {
-        // Implement the purchase logic
-        // This might involve updating quantities and creating order entries
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @GetMapping("/get_my_products/{id}")
+    public ResponseEntity<List<Product>> getAllProductsByUser(@PathVariable Long id) {
+        UserProfile userProfile = userProfileService.getUserProfile(id);
+        if (userProfile != null){
+            List<Product> scrapList = productService.getAllproducts(id);
+            return new ResponseEntity<>(scrapList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @PutMapping("/scrap/{id}")
-    public ResponseEntity<Scrap> updateScrap(@PathVariable Long id, @RequestBody Scrap scrap) {
-        Scrap updatedScrap = scrapService.updateScrap(id, scrap);
-        return new ResponseEntity<>(updatedScrap, HttpStatus.OK);
+    @GetMapping("/get_all_products/{id}")
+    public ResponseEntity<List<Product>> getAllProducts(@PathVariable Long id) {
+        UserProfile userProfile = userProfileService.getUserProfile(id);
+        if (userProfile != null){
+            List<Product> scrapList = productService.getAllproducts();
+            return new ResponseEntity<>(scrapList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @DeleteMapping("/scrap/{id}")
-    public ResponseEntity<Void> deleteScrap(@PathVariable Long id) {
-        scrapService.deleteScrap(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PutMapping("/product/{userId}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long userId, @RequestBody ProductDTO productDTO) {
+        UserProfile userProfile = userProfileService.getUserProfile(userId);
+        Product product = productService.getAllproduct(productDTO.getProductId());
+        if (userProfile != null && product != null){
+            Product updatedProduct = productService.updateProduct(productDTO, userId);
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+    }
+
+    @DeleteMapping("/product/{userProfileId}/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long userProfileId, @PathVariable Long productId) {
+        UserProfile userProfile = userProfileService.getUserProfile(userProfileId);
+        Product product = productService.getAllproduct(productId);
+        if (userProfile != null && product != null){
+            productService.deleteProduct(userProfileId, productId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
     }
 }
-

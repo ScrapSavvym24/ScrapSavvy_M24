@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.scrap.entities.Payment;
+import com.scrap.entities.UserProfile;
 import com.scrap.services.PaymentService;
+import com.scrap.services.UserProfileService;
 
 import java.util.List;
 
@@ -16,16 +18,24 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    @PostMapping
-    public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) {
-        Payment createdPayment = paymentService.savePayment(payment);
-        return new ResponseEntity<>(createdPayment, HttpStatus.CREATED);
-    }
+    @Autowired
+    private UserProfileService userProfileService;
 
-    @GetMapping
-    public ResponseEntity<List<Payment>> getAllPayments() {
-        List<Payment> payments = paymentService.getAllPayments();
-        return new ResponseEntity<>(payments, HttpStatus.OK);
+
+    // @PostMapping
+    // public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) {
+    //     Payment createdPayment = paymentService.savePayment(payment);
+    //     return new ResponseEntity<>(createdPayment, HttpStatus.CREATED);
+    // }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Payment>> getAllPayments(@PathVariable Long id) {
+        UserProfile userProfile = userProfileService.getUserProfile(id);
+        if (userProfile != null){
+            List<Payment> payments = paymentService.getAllPayments();
+            return new ResponseEntity<>(payments, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

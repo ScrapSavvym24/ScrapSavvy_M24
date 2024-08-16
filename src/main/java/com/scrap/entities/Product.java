@@ -1,6 +1,7 @@
 package com.scrap.entities;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -10,7 +11,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "categoryId")
     private Category category;
 
@@ -27,7 +28,7 @@ public class Product {
     private double pricePerQuantity;
 
     @Column(nullable = false)
-    private String productStatus;
+    private boolean productStatus;
 
     private String productDescription;
 
@@ -37,12 +38,16 @@ public class Product {
     @Column(nullable = false)
     private LocalDateTime updatedOn;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_profile_id", referencedColumnName = "userProfileId")
+    private UserProfile userProfile;
+
     // Default constructor
     public Product() {
     }
 
     // Parameterized constructor
-    public Product(Category category, String productName, int productQuantity, int availQuantity, double pricePerQuantity, String productStatus, String productDescription, LocalDateTime createdOn, LocalDateTime updatedOn) {
+    public Product(Category category, String productName, int productQuantity, int availQuantity, double pricePerQuantity, boolean productStatus, String productDescription, LocalDateTime createdOn, LocalDateTime updatedOn) {
         this.category = category;
         this.productName = productName;
         this.productQuantity = productQuantity;
@@ -103,11 +108,11 @@ public class Product {
         this.pricePerQuantity = pricePerQuantity;
     }
 
-    public String getProductStatus() {
+    public boolean getProductStatus() {
         return productStatus;
     }
 
-    public void setProductStatus(String productStatus) {
+    public void setProductStatus(boolean productStatus) {
         this.productStatus = productStatus;
     }
 
@@ -133,6 +138,14 @@ public class Product {
 
     public void setUpdatedOn(LocalDateTime updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 
     // toString method

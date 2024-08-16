@@ -15,7 +15,7 @@ public class UserProfile {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private String emailId;
+    private String email;
 
     private String companyName;
     private String companyAddress;
@@ -23,33 +23,46 @@ public class UserProfile {
 
     @Column(nullable = false)
     private boolean isActive;
-
+    
     @Column(nullable = false)
+    private String mobile;
+
+    public String getMobile() {
+		return mobile;
+	}
+    
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	@Column(nullable = false)
     private LocalDateTime createdOn;
 
     @Column(nullable = false)
     private LocalDateTime updatedOn;
 
-    @OneToOne(mappedBy = "userProfile")
+    // @OneToOne(mappedBy = "userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // private User user;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "userId")
     private User user;
 
-    // Default constructor
     public UserProfile() {
     }
 
-    // Parameterized constructor
-    public UserProfile(String name, String emailId, String companyName, String companyAddress, String userRole, boolean isActive, LocalDateTime createdOn, LocalDateTime updatedOn) {
+    public UserProfile(String name, String emailId, String companyName, String companyAddress, String mobile, String userRole, boolean isActive, LocalDateTime createdOn, LocalDateTime updatedOn) {
         this.name = name;
-        this.emailId = emailId;
+        this.email = emailId;
         this.companyName = companyName;
         this.companyAddress = companyAddress;
         this.userRole = userRole;
         this.isActive = isActive;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
+        this.mobile=mobile;
     }
 
-    // Getters and Setters
     public Long getUserProfileId() {
         return userProfileId;
     }
@@ -67,11 +80,11 @@ public class UserProfile {
     }
 
     public String getEmailId() {
-        return emailId;
+        return email;
     }
 
     public void setEmailId(String emailId) {
-        this.emailId = emailId;
+        this.email = emailId;
     }
 
     public String getCompanyName() {
@@ -130,20 +143,19 @@ public class UserProfile {
         this.user = user;
     }
 
-    // toString method
     @Override
     public String toString() {
         return "UserProfiles{" +
                 "userProfileId=" + userProfileId +
                 ", name='" + name + '\'' +
-                ", emailId='" + emailId + '\'' +
+                ", emailId='" + email + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", companyAddress='" + companyAddress + '\'' +
                 ", userRole='" + userRole + '\'' +
                 ", isActive=" + isActive +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
-                ", user=" + user +
+                // ", user=" + user +
                 '}';
     }
 }

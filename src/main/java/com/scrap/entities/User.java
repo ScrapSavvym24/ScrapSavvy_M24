@@ -12,7 +12,7 @@ public class User {
     private Long userId;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -26,27 +26,29 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedOn;
 
-    @OneToOne
-    @JoinColumn(name = "user_bank_details_id", referencedColumnName = "userBankDetailsId")
-    private UserBankDetail bankDetails;
+    // @OneToOne
+    // @JoinColumn(name = "user_bank_details_id", referencedColumnName = "userBankDetailsId")
+    // private UserBankDetail bankDetails;
 
-    @OneToOne
-    @JoinColumn(name = "user_profile_id", referencedColumnName = "userProfileId")
-    private UserProfile userProfile;
+    // @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    // @JoinColumn(name = "user_profile_id", referencedColumnName = "userProfileId")
+    // private UserProfile userProfile;
+
+
 
     // Default constructor
     public User() {
     }
 
     // Parameterized constructor
-    public User(String username, String password, boolean isLoggedIn, LocalDateTime createdOn, LocalDateTime updatedOn, UserBankDetail bankDetails, UserProfile userProfile) {
-        this.username = username;
+    public User(String email, String password, boolean isLoggedIn, LocalDateTime createdOn, LocalDateTime updatedOn, UserBankDetail bankDetails, UserProfile userProfile) {
+        this.email = email;
         this.password = password;
         this.isLoggedIn = isLoggedIn;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
-        this.bankDetails = bankDetails;
-        this.userProfile = userProfile;
+        // this.bankDetails = bankDetails;
+        // this.userProfile = userProfile;
     }
 
     // Getters and Setters
@@ -58,12 +60,12 @@ public class User {
         this.userId = userId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -98,34 +100,32 @@ public class User {
         this.updatedOn = updatedOn;
     }
 
-    public UserBankDetail getBankDetails() {
-        return bankDetails;
-    }
+    // public UserBankDetail getBankDetails() {
+    //     return bankDetails;
+    // }
 
-    public void setBankDetails(UserBankDetail bankDetails) {
-        this.bankDetails = bankDetails;
-    }
+    // public void setBankDetails(UserBankDetail bankDetails) {
+    //     this.bankDetails = bankDetails;
+    // }
 
-    public UserProfile getUserProfile() {
-        return userProfile;
-    }
+    // public UserProfile getUserProfile() {
+    //     return userProfile;
+    // }
 
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
+    // public void setUserProfile(UserProfile userProfile) {
+    //     this.userProfile = userProfile;
+    // }
 
     // toString method
     @Override
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", username='" + username + '\'' +
+                ", username='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", isLoggedIn=" + isLoggedIn +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
-                ", bankDetails=" + bankDetails +
-                ", userProfile=" + userProfile +
                 '}';
     }
 }

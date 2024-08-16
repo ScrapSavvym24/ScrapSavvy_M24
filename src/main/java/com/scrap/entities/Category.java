@@ -21,8 +21,8 @@ public class Category {
     @Column(nullable = false)
     private LocalDateTime updatedOn;
 
-    @OneToMany(mappedBy = "category")
-    private List<Product> products;
+    // @OneToMany(mappedBy = "category")
+    // private List<Product> products;
 
     // Default constructor
     public Category() {
@@ -68,13 +68,13 @@ public class Category {
         this.updatedOn = updatedOn;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
+    // public List<Product> getProducts() {
+    //     return products;
+    // }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+    // public void setProducts(List<Product> products) {
+    //     this.products = products;
+    // }
 
     // toString method
     @Override

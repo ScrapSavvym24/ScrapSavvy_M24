@@ -1,8 +1,9 @@
 package com.scrap.dto;
 
-public class LoginRequest {
+public class ForgotPasswordRequest {
     private String email;
     private String password;
+    private String confirmPassword;
 
     // Getters and setters
     public String getEmail() {
@@ -18,6 +19,14 @@ public class LoginRequest {
     }
 
     public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return password;
+    }
+
+    public void setConfirmPassword(String password) {
         this.password = password;
     }
 }

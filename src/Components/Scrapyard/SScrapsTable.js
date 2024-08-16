@@ -16,7 +16,6 @@ const SScrapsTable = () => {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-
   useEffect(()=>{
     getProducts();
   }, [])

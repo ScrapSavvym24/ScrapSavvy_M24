@@ -28,11 +28,11 @@
     transition: all 0.3s ease;
   }
   
-  /* #page-content-wrapper {
+  #page-content-wrapper {
     flex: 1;
     padding: 20px;
     transition: all 0.3s ease;
-  } */
+  }
   
   @media (min-width: 992px) {
     #page-content-wrapper {
@@ -75,7 +75,7 @@
     flex: 1;
   }
   
-  // For smaller screens
+   /* For smaller screens */
   .offcanvas {
     margin-top: 8px;
     border: none;
@@ -101,3 +101,22 @@
     color: white;
   }
   
+  #page-content-wrapper {
+    flex: 1;
+    padding: 20px;
+    transition: all 0.3s ease;
+    margin-bottom: 50px; /* Add this line, adjust the value to match your footer height */
+  }
+  
+  /* Add a footer styles */
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px; /* Adjust the height to match your footer content */
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+  }

@@ -1,12 +1,11 @@
 
 const Razorpay = (amount) => {
-  const RAZORPAY_KEY_ID = "rzp_test_DOTcz75F10VBzs";
+  const RAZORPAY_KEY_ID = "rzp_test_q5pCm6YsxMpdnN";
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      
       script.onload = () => resolve(true);
       script.onerror = () => resolve(false);
       document.body.appendChild(script);
@@ -15,7 +14,7 @@ const Razorpay = (amount) => {
 
   return new Promise(async (resolve, reject) => {
     console.log(amount);
-    if (amount !== undefined && amount >= 1) {
+    if (amount !== undefined && amount >= 100) {
       const scriptLoaded = await loadRazorpayScript();
       if (!scriptLoaded) {
         alert("Razorpay SDK failed to load. Are you online?");
@@ -35,12 +34,12 @@ const Razorpay = (amount) => {
           resolve(response.razorpay_payment_id); // Resolve the promise with the response
         },
         prefill: {
-          name: "",
-          email: "",
-          contact: "",
+          name: "Suraj Kanbarkar",
+          email: "youremail@example.com",
+          contact: "9999999999",
         },
         notes: {
-          address: "",
+          address: "IET Pune",
         },
         theme: {
           color: "#F37254",

@@ -7,6 +7,7 @@ import Toast from "../Common/Snackbar";
 import AuthService from "../../Services/AuthService";
 import { useDispatch } from "react-redux";
 import { ActionCreator } from "../../State/Actions/ActionCreator";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -17,11 +18,13 @@ const Signin = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [userRole, setUserRole] = useState(null);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [captchaToken, setCaptchaToken] = useState(""); // Add this state
 
-  useEffect(()=>{
+  useEffect(() => {
     // LoggedInUser(localStorage.getItem("userId"))
-  })
+  });
+
   const validate = () => {
     const tempErrors = {};
     let isValid = true;
@@ -44,49 +47,49 @@ const Signin = () => {
   //     })
   //   }
   // }
-  const redirectBasedOnRole = (role)=>{
-    console.log(role)
-    setTimeout(()=>{
-      if (role === "company"){
+  const redirectBasedOnRole = (role) => {
+    console.log(role);
+    setTimeout(() => {
+      if (role === "company") {
         navigate("/company-dashboard");
-      }
-      else if (role === "scrapyard"){
+      } else if (role === "scrapyard") {
         navigate("/scrapyard-dashboard");
-      }
-      else if (role === "customer"){
+      } else if (role === "customer") {
         navigate("/customer-dashboard");
       }
-    }, 2000)
-  }
+    }, 2000);
+  };
+
   const handleSignin = async (e) => {
     e.preventDefault();
-      if (validate()) {
-        const formData = {
-          email: email,
-          password: password
-        };
+    if (validate()) {
+      const formData = {
+        email: email,
+        password: password,
+      };
 
-          await AuthService.SignIn(formData)
-          .then(response => {
-            console.log(response)
-            if (response.status === 200) {
-              handleSnackbar("Sign-in successful!", "success", true);
-              localStorage.setItem("token", response.data.token)
-              localStorage.setItem("userId", response.data.userProfile.userProfileId)
-              redirectBasedOnRole(response.data.userProfile.userRole);
-              dispatch(ActionCreator.SetUserToken(response.data.token));
+      if (captchaToken === "") {
+        handleSnackbar("Please complete the CAPTCHA!", "error", true);
+        return;
+      }
 
-            }
-            else{
-                handleSnackbar("Server error!", "error", true);
-            }
-          })
-          .catch(error => {
-            handleSnackbar(error.response.data, "error", true);
+      await AuthService.SignIn(formData)
+        .then((response) => {
+          console.log(response);
+          if (response.status === 200) {
+            handleSnackbar("Sign-in successful!", "success", true);
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("userId", response.data.userProfile.userProfileId);
+            redirectBasedOnRole(response.data.userProfile.userRole);
+            dispatch(ActionCreator.SetUserToken(response.data.token));
+          } else {
+            handleSnackbar("Server error!", "error", true);
+          }
         })
-          
-    }
-    else {
+        .catch((error) => {
+          handleSnackbar(error.response.data, "error", true);
+        });
+    } else {
       handleSnackbar("Invalid credentials!", "error", true);
     }
   };
@@ -96,9 +99,15 @@ const Signin = () => {
     setSnackbarSeverity(severity);
     setSnackbarOpen(show);
   };
+
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
+
+  const handleCaptchaChange = (token) => {
+    setCaptchaToken(token);
+  };
+
   return (
     <>
       <Navbar />
@@ -130,7 +139,13 @@ const Signin = () => {
               helperText={errors.password}
               margin="normal"
             />
-            <button
+
+            <ReCAPTCHA
+              sitekey="6LfNSScqAAAAADUyragfgb_L3G1KUSoz-Cv8j6Bw"
+              onChange={handleCaptchaChange}
+            />
+
+<button
               type="button"
               className="btn btn-primary w-100 mt-3"
               onClick={handleSignin}

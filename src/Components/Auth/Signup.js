@@ -1,6 +1,22 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Box, Button, Container, TextField, Typography, Grid, Snackbar, Alert, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Grid,
+  Snackbar,
+  Alert,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  IconButton,
+  InputAdornment
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { BRANDNAME } from "../../Services/Utils";
 import Navbar from "../Common/Navbar";
 import Toast from "../Common/Snackbar";
@@ -22,15 +38,17 @@ const Signup = () => {
   const [companyAddress, setCompanyAddress] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [userRole, setUserRole] = useState();
+  const [userRole, setUserRole] = useState('');
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const dispatch = useDispatch();
-    
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
+
   const validate = () => {
     const tempErrors = {};
     let isValid = true;
@@ -42,6 +60,7 @@ const Signup = () => {
     setErrors(tempErrors);
     return isValid;
   };
+
   const handleSignUp = async () => {
     if (password !== confirmPassword) {
       setSnackbarMessage('Passwords do not match!');
@@ -49,38 +68,44 @@ const Signup = () => {
       setSnackbarOpen(true);
       return;
     }
-    //dispatch(ActionCreator.SetUserProfile({"email": email, "password": password}));
+
+    if (!name || !email || !mobile || !companyName || !companyAddress || !password || !confirmPassword || !userRole) {
+      setSnackbarMessage('Please fill in all fields!');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      return;
+    }
+
     if (validate()) {
       let formData = {
-      "email": email,
-      "name": name,
-      "mobile": mobile,
-      "companyName": companyName,
-      "companyAddress": companyAddress,
-      "password": password,
-      "confirmPassword": confirmPassword,
-      "userRole": userRole
+        "email": email,
+        "name": name,
+        "mobile": mobile,
+        "companyName": companyName,
+        "companyAddress": companyAddress,
+        "password": password,
+        "confirmPassword": confirmPassword,
+        "userRole": userRole
       }
       await AuthService.SignUp(formData)
         .then((response) => {
           console.log(response)
-            if (response.status === 201) {
-              handleSnackbar("Sign-up successful!", "success", true);
-              setTimeout(()=>{
-                navigate("/signin");
-              }, 2000)
-              
-            }
-            else{
-                handleSnackbar("Server error!", "error", true);
-            }
+          if (response.status === 201) {
+            handleSnackbar("Sign-up successful!", "success", true);
+            setTimeout(() => {
+              navigate("/signin");
+            }, 2000)
+
+          } else {
+            handleSnackbar("Server error!", "error", true);
+          }
         })
         .catch(error => {
-            handleSnackbar(error.response.data, "error", true);
+          handleSnackbar(error.response.data, "error", true);
         })
-  } 
-    
-}
+    }
+
+  }
 
   const handleSnackbar = (message, severity, show) => {
     setSnackbarMessage(message);
@@ -88,22 +113,31 @@ const Signup = () => {
     setSnackbarOpen(show);
   };
 
-  const handleRoleChange = (event) =>{
+  const handleRoleChange = (event) => {
     setUserRole(event.target.value);
   }
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <>
       <Navbar />
       <div className="md-container">
-      <Toast
-        open={snackbarOpen}
-        close={handleSnackbarClose}
-        message={snackbarMessage}
-        severity={snackbarSeverity}
-      />
+        <Toast
+          open={snackbarOpen}
+          close={handleSnackbarClose}
+          message={snackbarMessage}
+          severity={snackbarSeverity}
+        />
         <div className="header-div">
-            <h1>Sign up</h1>
-          </div>
+          <h1>Sign up</h1>
+        </div>
         <Box component="form" noValidate autoComplete="off">
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -113,6 +147,7 @@ const Signup = () => {
                 variant="outlined"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -122,6 +157,7 @@ const Signup = () => {
                 variant="outlined"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -130,7 +166,15 @@ const Signup = () => {
                 label="Mobile"
                 variant="outlined"
                 value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.length === 0 || (value.length <= 10 && !isNaN(value) && (value.length === 1 || /^[06879]/.test(value)))) {
+                    setMobile(value);
+                  }
+                }}
+                type="tel"
+                inputMode="tel"
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -140,58 +184,88 @@ const Signup = () => {
                 variant="outlined"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-              fullWidth
+                fullWidth
                 label="Company Address"
                 variant="outlined"
                 multiline
                 rows={3}
                 value={companyAddress}
                 onChange={(e) => setCompanyAddress(e.target.value)}
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel id="category-select-label">Sign up as </InputLabel>
-              <Select labelId="category-select-label" value={userRole} onChange={handleRoleChange} label="Product category">
-                <MenuItem value="customer">Customer</MenuItem>
-                <MenuItem value="company">Company</MenuItem>
-                <MenuItem value="scrapyard">Scrapyard</MenuItem>
-              </Select>
-            </FormControl>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel id="category-select-label">Sign up as </InputLabel>
+                <Select labelId="category-select-label" value={userRole} onChange={handleRoleChange} label="Product category">
+                  <MenuItem value="customer">Customer</MenuItem>
+                  <MenuItem value="company">Company</MenuItem>
+                  <MenuItem value="scrapyard">Scrapyard</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                type="password"
+                type={showPassword ? "text" : "password"}
                 label="Password"
                 variant="outlined"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={toggleShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 label="Confirm Password"
                 variant="outlined"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle confirm password visibility"
+                        onClick={toggleShowConfirmPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ mt: 4 }}>
             <Grid item xs={12} sm={6}>
-            <button type="button" className="btn btn-primary w-100" onClick={handleSignUp}>
+              <button type="button" className="btn btn-primary w-100" onClick={handleSignUp}>
                 Sign up
               </button>
             </Grid>
             <Grid item xs={12} sm={6}>
-            <Link type="button" className="btn btn-light w-100" to="/signin">
+              <Link type="button" className="btn btn-light w-100" to="/signin">
                 Have an account?
               </Link>
             </Grid>

@@ -1,7 +1,7 @@
-// src/components/Footer.js
-
 import React from 'react';
-import './Footer.css'; // Import the CSS file for styling if you have one
+import { Link } from 'react-router-dom';
+import ContactUs from './ContactUs'
+import './Footer.css';
 
 function Footer() {
   return (
@@ -10,17 +10,19 @@ function Footer() {
         <div className="footer-links">
           <a href="#terms">Terms & Conditions</a>
           <a href="#privacy">Privacy Policy</a>
-          <a href="#contact">Contact Us</a>
+          <Link to="/ContactUs" className="contact-us-link">
+            Contact Us
+          </Link>
         </div>
         <div className="social-links">
-          <a href=" https://www.instagram.com/scacpsavvy_m24/">
-          <i className="fab fa-instagram"></i>
+          <a href="https://www.instagram.com/scacpsavvy_m24/">
+            <i className="fab fa-instagram"></i>
           </a>
-          <a href=" scrapsavvy.m24@gmail.com">
-          <i className="fas fa-envelope"></i>
+          <a href="scrapsavvy.m24@gmail.com">
+            <i className="fas fa-envelope"></i>
           </a>
           <a href="8329826990">
-          <i className="fas fa-phone"></i>
+            <i className="fas fa-phone"></i>
           </a>
         </div>
       </div>

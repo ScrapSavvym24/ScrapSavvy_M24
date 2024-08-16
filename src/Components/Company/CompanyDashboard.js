@@ -4,6 +4,7 @@ import CompanySidebar from '../Common/CompanySidebar';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import LogoutMenu from '../Common/LogoutMenu';
+import CompScrapsTable from './CompScrapsTable';
 
 const CompanyDashboard = () => {
   const token = useSelector(state => state)

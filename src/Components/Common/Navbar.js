@@ -20,8 +20,8 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const navItems = ['HOME', 'ABOUT US','CONTACT', 'SIGNUP', 'SIGNIN'];
+ 
+  const navItems = ['HOME', 'SIGNUP', 'SIGNIN'];
 
 
   return (
@@ -40,6 +40,7 @@ const Navbar = () => {
                 >
                   {item}
                 </Link>
+                
                
               </div>
             ))}

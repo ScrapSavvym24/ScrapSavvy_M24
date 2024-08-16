@@ -7,23 +7,28 @@ import LogoutMenu from "../Common/LogoutMenu";
 import CompanySidebar from "../Common/CompanySidebar";
 
 const CompPaymentsReceivedTable = () => {
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+
+  let transactionId = 98765; // initial transaction ID
+
   const transactions = [
     {
       srNo: 1,
-      transactionId: "TXN12345",
+      transactionId: `TXN${transactionId++}`,
       receivedFrom: "Customer A",
       paymentMode: "Credit Card",
       status: "Paid",
-      paidOn: "2023-11-24",
+      paidOn: formattedDate,
       invoice: "INV-001",
     },
     {
       srNo: 2,
-      transactionId: "TXN67890",
+      transactionId: `TXN${transactionId++}`,
       receivedFrom: "Customer B",
       paymentMode: "Debit Card",
       status: "Pending",
-      paidOn: "2023-12-01",
+      paidOn: formattedDate,
       invoice: "INV-002",
     },
   ];

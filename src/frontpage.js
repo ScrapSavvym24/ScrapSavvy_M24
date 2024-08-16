@@ -20,7 +20,7 @@ function Frontpage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = ['HOME', 'ABOUT US','CONTACT', 'SIGNUP', 'SIGNIN'];
+  const navItems = ['HOME', 'SIGNUP', 'SIGNIN'];
 
 
   return (

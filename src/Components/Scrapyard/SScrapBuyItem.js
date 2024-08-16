@@ -147,7 +147,7 @@ import ScrapyardService from "../../Services/ScrapyardService";
           </Box>
             <Box sx={{ mt: 3, textAlign: "right" }}>
               <button type="button" class="btn btn-dark" onClick={() => handlePayment(totalAmount)}>
-                Buyss product
+                Buy product
               </button>
             </Box>
           </Box>

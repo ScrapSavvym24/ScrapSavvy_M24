@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 // import './App.css';
 import '../src/Static/Style.css'
+
 import { BrowserRouter, Route, Routes, Link, Navigate } from 'react-router-dom';
 import CompanyDashboard from './Components/Company/CompanyDashboard';
 import Signup from './Components/Auth/Signup';
@@ -23,6 +24,7 @@ import CompPaymentsReceivedTable from './Components/Company/CompPaymentsReceived
 import CompScrapsTable from './Components/Company/CompScrapsTable';
 import Frontpage from './frontpage';
 import Footer from './Components/Common/footer';
+
 
 
 function App() {
@@ -59,8 +61,9 @@ function App() {
           
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
-      <Footer />
+      
     </div>
   );
 }
